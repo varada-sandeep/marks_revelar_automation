@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTU Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>VTU Results</h1>
+        <form id="main-form">
+            <label for="user_input">VTU Number:</label>
+            <input type="text" id="user_input" name="user_input" required>
+            <label for="action_type">Action:</label>
+            <select id="action_type" name="action_type" required>
+                <option value="gpa">GPA</option>
+                <option value="cgpa">CGPA</option>
+            </select>
+            <div id="semester-input" style="display: none;">
+                <label for="semester">Semester:</label>
+                <input type="number" id="semester" name="semester" min="1" max="8">
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="popup" class="popup" style="display: none;">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <p id="popup-message"></p>
+                <form id="credits-form" style="display: none;">
+                    <input type="hidden" id="subject" name="subject">
+                    <label for="credits">Enter Credits:</label>
+                    <input type="number" id="credits" name="credits" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#action_type').change(function() {
+                if ($(this).val() == 'gpa') {
+                    $('#semester-input').show();
+                } else {
+                    $('#semester-input').hide();
+                }
+            });
+
+            $('#main-form').submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '/submit',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                        } else {
+                            $('#popup-message').text(response.message);
+                            if (response.subject) {
+                                $('#credits-form').show();
+                                $('#subject').val(response.subject);
+                            } else {
+                                $('#credits-form').hide();
+                            }
+                            $('#popup').show();
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred');
+                    }
+                });
+            });
+
+            $('#credits-form').submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '/submit_credits',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#popup').hide();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred');
+                    }
+                });
+            });
+
+            $('.close').click(function() {
+                $('#popup').hide();
+            });
+        });
+    </script>
+</body>
+</html>
