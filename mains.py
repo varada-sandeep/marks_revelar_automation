@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from tkinter import Tk, simpledialog
-from selenium.webdriver.common.window import WindowTypes
 from tkinter import messagebox
 import time
 import tkinter as tk
