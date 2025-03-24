@@ -15,7 +15,7 @@ class Marks:
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(options=chrome_options)
-        url = "http://results.veltech.edu.in/Stulogin/"
+        url = "https://results.veltech.edu.in/Stulogin/index.aspx"
         self.driver.get(url=url)
         self.login_pa()
 
@@ -113,7 +113,7 @@ class Marks:
         if self.table == []:
             self.error_show(1)
         crdits_earned_per_subject = {}
-        with open("marks_revelar_automation\\sub_credit.json", "r") as fp:
+        with open("sub_credit.json", "r") as fp:
             r = fp.read()
             jl = json.loads(r)
             for i in self.table:
@@ -140,7 +140,7 @@ class Marks:
                 else:
                     data = {self.sub: self.credit_finder()}
                 jl.update(data)
-        with open("marks_revelar_automation\\sub_credit.json", "w") as fp:
+        with open("sub_credit.json", "w") as fp:
             json.dump(jl, fp, indent=4)
         if crdits_earned_per_subject == {}:
             messagebox.showinfo(message="result not yet declared")
@@ -163,7 +163,7 @@ class Marks:
             By.CSS_SELECTOR, ".gridAlternatingRowStyle"
             )
 
-            with open("marks_revelar_automation\\sub_credit.json", "r") as fp:
+            with open("sub_credit.json", "r") as fp:
                 r = fp.read()
                 jl = json.loads(r)
                 for i in table:
@@ -217,7 +217,7 @@ class Marks:
         # gpa_calculator = self.driver.window_handles[1]
         # self.driver.switch_to.window(gpa_calculator)
         # self.driver.get("http://saikumarpoguweb.epizy.com/index.html?i=1")
-        with open("marks_revelar_automation\\sub_credit.json", "r") as fp:
+        with open("sub_credit.json", "r") as fp:
             r = json.loads(fp.read())
 
             creds = 0
